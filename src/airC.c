@@ -14,64 +14,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+//#include <argp.h>
+#include "airc.h"
 
-void help();
-void usage();
-struct airfoil NACA4(int);
-
-struct airfoil {
-	char * desc; //short text description
-	long * x_c;  //mean camber line
-	long * y_c;
-	long * x_U;  //upper surface
-	long * y_U;
-	long * x_L;  // lower surface
-	long * y_L;
-};
 
 size_t numPoints;
 void x_straight (double *);
 void x_curved   (double *);
+void allocate_airfoil(struct airfoil *);
+void print_airfoil(struct airfoil * a);
 
 // x_c, y_c, x_U, y_U, x_L, y_L
 void airfoil_gen(double *,double *,double *, double *,double *,double *);
 //void airfoil_gen(double *);
 
-double * dx(double *);
 void meanLineNACA4(double, double, double *, double *);
 
-int main(void) {
+int main(int argc, char *argv[]) {
 	int i;
-	puts("airC airfoil generator");
-
+	int num = atoi(argv[2]);
 	numPoints = 30;
-	double m = 0.5;
-	double p = 0.6;
-	double * x_c = malloc(numPoints*sizeof(double));
-	double * y_c = malloc(numPoints*sizeof(double));
-	double * x_L = malloc(numPoints*sizeof(double));
-	double * x_U = malloc(numPoints*sizeof(double));
-	double * y_L = malloc(numPoints*sizeof(double));
-	double * y_U = malloc(numPoints*sizeof(double));
 
-	x_curved(x_c);
-	meanLineNACA4(m, p, x_c, y_c);
-	//airfoil_gen (double * x_c, double * y_c, double * x_U, double * y_U, double * x_L, double * y_L);
+	puts("airC airfoil generator");
+	printf("%s %s %s\n",argv[0],argv[1],argv[2]);
 
-	airfoil_gen(x_c, y_c, x_U, y_U, x_L, y_L);
+	struct airfoil * a = NACA4(num);
+
+	print_airfoil(a);
+	return EXIT_SUCCESS;
+}
+
+struct airfoil * NACA4(int num){
+	struct airfoil * a;
+
+	a->x_c =  malloc(numPoints*sizeof(double));
+	(*a).y_c = malloc(numPoints*sizeof(double));
+	(*a).x_L = malloc(numPoints*sizeof(double));
+	(*a).x_U = malloc(numPoints*sizeof(double));
+	(*a).y_L = malloc(numPoints*sizeof(double));
+	(*a).y_U = malloc(numPoints*sizeof(double));
+
+	double m,p,t;
+
+	t = num%100;
+	num = num - t;
+	p = num%1000;
+	num=num-p;
+	m = num;
+
+	//allocate_airfoil(a);
+
+	x_curved(a->x_c);
+
+	meanLineNACA4(m, p, a->x_c, a->y_c);
+
+	//airfoil_gen(a->x_c, a->y_c, a->x_U, a->y_U, a->x_L, a->y_L);
+
+
+	return a;
+}
+
+void allocate_airfoil(struct airfoil * a){
+	double hi;
+	a->x_c =  &hi;//malloc(100*sizeof(double));
+	(*a).y_c = malloc(numPoints*sizeof(double));
+	(*a).x_L = malloc(numPoints*sizeof(double));
+	(*a).x_U = malloc(numPoints*sizeof(double));
+	(*a).y_L = malloc(numPoints*sizeof(double));
+	(*a).y_U = malloc(numPoints*sizeof(double));
+}
+
+void print_airfoil(struct airfoil * a){
 	printf("i \t x_c \t y_c \t x_U \t y_U \t x_L \t y_L\n");
 	printf("------\t-----\t------\t------\t------\t------\t------\n");
+	int i;
 	for (i=0; i<numPoints;i++){
-		printf("%d\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\n",i, *x_c, *y_c, *x_U, *y_U, *x_L, *y_L);
-		x_c++;
-		y_c++;
-		x_U++;
-		y_U++;
-		x_L++;
-		y_L++;
+		printf("%d\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\n",i, *a->x_c, *a->y_c, *a->x_U, *a->y_U, *a->x_L, *a->y_L);
+		(*a).x_c++;
+		(*a).y_c++;
+		(*a).x_U++;
+		(*a).y_U++;
+		(*a).x_L++;
+		(*a).y_L++;
 	}
-
-	return EXIT_SUCCESS;
 }
 
 double * diff(double * x){
@@ -115,9 +140,9 @@ void x_straight(double * xPoints){
 /**
  * concentrate points towards the leading and trailing edges
  */
-void x_curved(double* xPoints){
+void x_curved(double* x){
 	double dx = 1.0 / (numPoints-1);
-	//double * xPoints;// = malloc(numPoints*sizeof(double));
+	double * xPoints = x;
 	//double * xPoints_ = xPoints;
 
 	int i;
