@@ -18,9 +18,24 @@
 #include "airc.h"
 
 
+void help();
+void usage();
+struct airfoil NACA4(int);
+
+struct airfoil {
+	char * desc; //short text description
+	double * x_c;  //mean camber line
+	double * y_c;
+	double * x_U;  //upper surface
+	double * y_U;
+	double * x_L;  // lower surface
+	double * y_L;
+};
+
+
 size_t numPoints;
 void x_straight (double *);
-void x_curved   (double *);
+void x_curved   (struct airfoil *);
 void allocate_airfoil(struct airfoil *);
 void print_airfoil(struct airfoil * a);
 
@@ -38,21 +53,21 @@ int main(int argc, char *argv[]) {
 	puts("airC airfoil generator");
 	printf("%s %s %s\n",argv[0],argv[1],argv[2]);
 
-	struct airfoil * a = NACA4(num);
+	struct airfoil a = NACA4(num);
 
-	print_airfoil(a);
+	print_airfoil(&a);
 	return EXIT_SUCCESS;
 }
 
-struct airfoil * NACA4(int num){
-	struct airfoil * a;
+struct airfoil NACA4(int num){
+	struct airfoil a;
 
-	a->x_c =  malloc(numPoints*sizeof(double));
-	(*a).y_c = malloc(numPoints*sizeof(double));
-	(*a).x_L = malloc(numPoints*sizeof(double));
-	(*a).x_U = malloc(numPoints*sizeof(double));
-	(*a).y_L = malloc(numPoints*sizeof(double));
-	(*a).y_U = malloc(numPoints*sizeof(double));
+	a.x_c = malloc(numPoints*sizeof(double));
+	a.y_c = malloc(numPoints*sizeof(double));
+	a.x_L = malloc(numPoints*sizeof(double));
+	a.x_U = malloc(numPoints*sizeof(double));
+	a.y_L = malloc(numPoints*sizeof(double));
+	a.y_U = malloc(numPoints*sizeof(double));
 
 	double m,p,t;
 
@@ -64,11 +79,11 @@ struct airfoil * NACA4(int num){
 
 	//allocate_airfoil(a);
 
-	x_curved(a->x_c);
+	x_curved(&a);
 
-	meanLineNACA4(m, p, a->x_c, a->y_c);
+	meanLineNACA4(m, p, a.x_c, a.y_c);
 
-	//airfoil_gen(a->x_c, a->y_c, a->x_U, a->y_U, a->x_L, a->y_L);
+	airfoil_gen(a.x_c, a.y_c, a.x_U, a.y_U, a.x_L, a.y_L);
 
 
 	return a;
@@ -140,9 +155,9 @@ void x_straight(double * xPoints){
 /**
  * concentrate points towards the leading and trailing edges
  */
-void x_curved(double* x){
+void x_curved(struct airfoil * a){
 	double dx = 1.0 / (numPoints-1);
-	double * xPoints = x;
+	double * xPoints = a->x_c;
 	//double * xPoints_ = xPoints;
 
 	int i;
