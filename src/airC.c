@@ -1,10 +1,10 @@
 /*
  ============================================================================
  Name        : airC.c
- Author      : 
- Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Author      : Cole Christensen 
+ Version     : 0.1
+ Copyright   : 2012
+ Description : 
  ============================================================================
  */
 
@@ -14,12 +14,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#include <argp.h>
+#include <argp.h>
 #include "airc.h"
 
 
 void help();
 void usage();
+
+void usage(){
+	printf("Airfoil generator example usage:\n\n");
+	printf("   airC NACA 2412\n");
+}
+
 struct airfoil NACA4(int);
 
 struct airfoil {
@@ -47,6 +53,11 @@ void meanLineNACA4(double, double, double *, double *);
 
 int main(int argc, char *argv[]) {
 	int i;
+
+	if (argc < 1){
+		usage();
+		return EXIT_FAILURE;
+	}
 	int num = atoi(argv[2]);
 	numPoints = 30;
 
