@@ -1,1 +1,3 @@
-Sample readme file for airC project.
+== airC ==
+
+A simple commandline utility for generating standard airfoils.
