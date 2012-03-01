@@ -1,21 +1,11 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "airfoil.h"
 
 int numPoints = 41;
 
-struct airfoil {
-	char * desc; //short text description
-	double * x_c;  //mean camber line
-	double * y_c;
-	double * x_U;  //upper surface
-	double * y_U;
-	double * x_L;  // lower surface
-	double * y_L;
-};
 
-void x_straight (double *);
 void x_curved   (struct airfoil *);
 void meanLineNACA4(double, double, double *, double *);
 void airfoil_gen(double *,double *,double *, double *,double *,double *);
@@ -41,14 +31,14 @@ void allocate_airfoil(struct airfoil * a){
 	(*a).y_U = malloc(numPoints*sizeof(double));
 }
 
-void x_straight(double * xPoints){
-	double dx = 1.0 / (numPoints-1);
-	int i;
-
-	for(i = 0; i < numPoints; i++){
-		*xPoints = dx * i;
-		xPoints++;
-	}
+void free_airfoil(struct airfoil * a){
+	free((*a).x_c);
+	free((*a).y_c);
+	free((*a).x_L);
+	free((*a).y_L);
+	free((*a).x_U);
+	free((*a).y_U);
+	free(a);
 }
 
 void airfoil_gen (double * x_c,double * y_c, double * x_U, double * y_U, double * x_L, double * y_L){
@@ -97,12 +87,26 @@ void meanLineNACA4(double m, double p, double * x, double * y){
 	}
 }
 
-int main(){
+int NACA4parse(int num, double * m, double * p, double * t){
+	*t  = num%100;
+	num = num - *t;
+	*t /= 100;
+	*p  = num%1000;
+	num = num-*p;
+	*p /= 1000;
+	*m  = num;
+	*m /= 100000;
+}
+
+int NACA4(){
+	int num = 2412;
+	double m, p, t;
+	NACA4parse(num,&m,&p,&t);
 	struct airfoil a;
 	allocate_airfoil(&a);
 	x_straight(a.x_c);
-	meanLineNACA4(0.02,0.4,a.x_c,a.y_c);
-	airfoil_gen (a.x_c,a.y_c,a.x_U,a.y_U,a.x_L,a.y_L);
+	meanLineNACA4(m,p,a.x_c,a.y_c);
+	airfoil_gen (a.x_c,a.y_c,a.x_U,a.y_U,a.x_L,a.y_L); //TODO: insert t
 	print_airfoil(&a);
 	return 0;
 }
