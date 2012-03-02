@@ -30,10 +30,6 @@ void airfoil_gen(double *,double *,double *, double *,double *,double *);
 //void airfoil_gen(double *);
 
 int main(int argc, char *argv[]) {
-	//double m;
-	//double p;
-	//double t;
-//	NACA4parse(2412, &m, &p, &t);
 	NACA4();
 	/*int i;
 	int num = atoi(argv[2]);
