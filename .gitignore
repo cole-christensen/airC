@@ -1,0 +1,9 @@
+
+config.log
+
+config.status
+
+src/.deps
+*.o
+autom4te.cache
+*.swp
