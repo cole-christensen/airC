@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <argp.h>
 #include "airc.h"
 #include "airfoil.h"
 
@@ -26,8 +25,6 @@ void usage(){
 	printf("Airfoil generator example usage:\n\n");
 	printf("   airC NACA 2412\n");
 }
-
-struct airfoil NACA4(int);
 
 void x_curved   (struct airfoil *);
 
