@@ -14,8 +14,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "airc.h"
 #include "airfoil.h"
+#include "NACA4.h"
 
 
 void help();
@@ -33,7 +35,22 @@ void airfoil_gen(double *,double *,double *, double *,double *,double *);
 //void airfoil_gen(double *);
 
 int main(int argc, char *argv[]) {
-	NACA4();
+	for(int i=0; i<argc;i++){
+		printf("%s ",argv[i]);
+	} printf("\n");
+
+	if(argc > 1){
+		if (strcmp(argv[1],"NACA") == 0){
+			NACA4();
+			//NACA4(atoi(argv[2]));
+		} else {
+			usage();
+			return EXIT_FAILURE;
+		}
+	} else {
+		usage();
+		return EXIT_FAILURE;
+	}
 	/*int i;
 	int num = atoi(argv[2]);
 	numPoints = 30;
