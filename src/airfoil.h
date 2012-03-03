@@ -8,6 +8,11 @@ struct airfoil {
         double * y_L;
 };
 
+int numPoints;
+
 void x_straight (double *); /* evenly spaced points */
 void x_curved   (struct airfoil *); /* points concentrated at L.E. and T.E. */
 void allocate_airfoil(struct airfoil *);
+
+
+
