@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
 
 	if(argc > 1){
 		if (strcmp(argv[1],"NACA") == 0){
-			NACA4();
-			//NACA4(atoi(argv[2]));
+			//NACA4();
+			NACA4(atoi(argv[2]));
 		} else {
 			usage();
 			return EXIT_FAILURE;
@@ -50,20 +50,12 @@ int main(int argc, char *argv[]) {
 	} else {
 		usage();
 		return EXIT_FAILURE;
+
+		return EXIT_SUCCESS;
 	}
-	/*int i;
-	int num = atoi(argv[2]);
-	numPoints = 30;
-
-	puts("airC airfoil generator");
-	printf("%s %s %s\n",argv[0],argv[1],argv[2]);
-
-	struct airfoil a = NACA4a(num);
-
-	print_airfoil(&a);*/
-	return EXIT_SUCCESS;
 }
 
+/*
 struct airfoil NACA4a(int num){
 	struct airfoil a;
 
@@ -86,7 +78,7 @@ struct airfoil NACA4a(int num){
 
 	return a;
 }
-
+*/
 
 /**
  * concentrate points towards the leading and trailing edges
