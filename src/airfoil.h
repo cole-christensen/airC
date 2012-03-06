@@ -13,7 +13,7 @@ int numPoints;
 
 void x_straight (struct airfoil *); /* evenly spaced points */
 void x_curved   (struct airfoil *); /* points concentrated at L.E. and T.E. */
-void allocate_airfoil(struct airfoil *);
+void allocate_airfoil(struct airfoil *, int);
 
 
 

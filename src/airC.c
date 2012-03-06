@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	if(argc > 1){
 		if (strcmp(argv[1],"NACA") == 0){
 			//NACA4();
-			NACA4(atoi(argv[2]));
+			NACA4(atoi(argv[2]),11);
 		} else {
 			usage();
 			return EXIT_FAILURE;
@@ -50,9 +50,8 @@ int main(int argc, char *argv[]) {
 	} else {
 		usage();
 		return EXIT_FAILURE;
-
-		return EXIT_SUCCESS;
 	}
+	return EXIT_SUCCESS;
 }
 
 /*

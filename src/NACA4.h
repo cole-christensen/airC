@@ -1,1 +1,1 @@
-int NACA4(int);
+int NACA4(int, int);
